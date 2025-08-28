@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meeting Minutes Register</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f6f9;
+      color: #333;
+    }
+    header {
+      background: #1e3a8a;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 30px auto;
+      padding: 20px;
+    }
+    .card {
+      background: white;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    h2 {
+      color: #1e3a8a;
+      margin-top: 0;
+    }
+    label {
+      display: block;
+      margin: 8px 0;
+      font-weight: 500;
+    }
+    input[type="checkbox"] {
+      margin-right: 8px;
+    }
+    textarea {
+      width: 100%;
+      min-height: 200px;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      resize: vertical;
+    }
+    .btn-group {
+      margin-top: 15px;
+      display: flex;
+      gap: 10px;
+    }
+    button {
+      background: #1e3a8a;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    button:hover {
+      background: #3749ad;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>📑 Meeting Attendance & Minutes</h1>
+    <p>Team: Prosper Ntuli, Nzama Mokgotu, T.L., Bianca Botsane</p>
+  </header>
+
+  <div class="container">
+
+    <!-- Attendance Register -->
+    <div class="card">
+      <h2>✅ Attendance Register</h2>
+      <form id="attendanceForm">
+        <label><input type="checkbox" name="attendance" value="Prosper Ntuli"> Prosper Ntuli</label>
+        <label><input type="checkbox" name="attendance" value="Nzama Mokgotu"> Nzama Mokgotu</label>
+        <label><input type="checkbox" name="attendance" value="T.L."> T.L.</label>
+        <label><input type="checkbox" name="attendance" value="Bianca Botsane"> Bianca Botsane</label>
+      </form>
+    </div>
+
+    <!-- Minutes Section -->
+    <div class="card">
+      <h2>📝 Minutes of the Meeting</h2>
+      <textarea id="minutes" placeholder="Type the meeting minutes here..."></textarea>
+      <div class="btn-group">
+        <button onclick="saveMinutes()">💾 Save Locally</button>
+        <button onclick="printMinutes()">🖨️ Print / Export</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function saveMinutes() {
+      const attendees = Array.from(document.querySelectorAll('input[name="attendance"]:checked'))
+                            .map(cb => cb.value).join(", ");
+      const minutes = document.getElementById("minutes").value;
+      const blob = new Blob(
+        ["Meeting Attendance:\n" + attendees + "\n\nMinutes:\n" + minutes],
+        { type: "text/plain;charset=utf-8" }
+      );
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "MeetingMinutes.txt";
+      link.click();
+    }
+
+    function printMinutes() {
+      const attendees = Array.from(document.querySelectorAll('input[name="attendance"]:checked'))
+                            .map(cb => cb.value).join(", ");
+      const minutes = document.getElementById("minutes").value;
+      const newWin = window.open("", "_blank");
+      newWin.document.write("<h2>Meeting Attendance</h2><p>" + attendees + "</p>");
+      newWin.document.write("<h2>Minutes</h2><p>" + minutes.replace(/\n/g, "<br>") + "</p>");
+      newWin.print();
+    }
+  </script>
+
+</body>
+</html>
